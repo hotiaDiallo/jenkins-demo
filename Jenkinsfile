@@ -15,7 +15,18 @@ pipeline {
 
         stage('Build docker image') {
             steps {
-                echo 'Building docker image'
+                withCredentials([usernameColonPassword(
+                        credentialsId: 'docker-login',
+                        usernameVariable: 'USERNAME',
+                        passwordVariable: 'PASSWORD')]
+                ) {
+                    echo 'Docker build'
+                    sh "docker build -t selftaughdevops/jenkins-demo:0.1 ."
+                    echo 'Docker login'
+                    sh "echo $PASSWORD | docker login -u $USERNAME --password-stdin"
+                    echo 'Docker push'
+                    sh "docker push selftaughdevops/jenkins-demo:0.1"
+                }
             }
         }
     }
