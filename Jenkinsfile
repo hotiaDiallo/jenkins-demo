@@ -1,3 +1,5 @@
+#!/usr/bin/env groovy
+
 pipeline {
     agent any
     tools {
@@ -8,6 +10,12 @@ pipeline {
         stage('Build jar') {
             steps {
                 sh "mvn -Dmaven.test.failure.ignore=true clean package"
+            }
+        }
+
+        stage('Build docker image') {
+            steps {
+                echo 'Building docker image'
             }
         }
     }
